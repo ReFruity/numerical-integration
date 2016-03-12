@@ -4,39 +4,32 @@ namespace Integrals
 {
     class Program
     {
-        private const int N = 20;
-        static double Integrand(double x) =>
-            Math.Sqrt(x)*Math.Exp(x);
-
-        static Method[] GetMethods() =>
-            new Method[]
-            {
-                new LeftRectangle(),
-                new RightRectangle(),
-                new Simpson(),
-                new Gregory(), 
-                new Trapeze(), 
-                new ThreeEight(), 
-            };
-
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            var N = Parameters.N;
+            var methods = Parameters.GetMethods();
+            var integrand = Parameters.GetIntegrand();
+
             var left = 0.1*N;
             var right = 0.5 + 0.2*N;
-            var steps = new[]{0.1, 0.05, 0.025};
-            var methods = GetMethods();
+            var steps = new[] {0.1, 0.05, 0.025};
             var format = "{0,-20} {1,-20} {2,-20}";
-            Console.WriteLine(format,"Method","Integral value","Error");
+
+            Console.WriteLine("N = " + N);
+            Console.WriteLine(format, "Method", "Integral value", "Error");
+
             foreach (var step in steps)
             {
                 Console.WriteLine(step);
+
                 foreach (var method in methods)
                 {
-                    Console.WriteLine(format, 
+                    Console.WriteLine(format,
                         method.GetType().Name,
-                        method.ComplexCalc(Integrand,left,right,step),
-                        method.Error(Integrand, left, right, step));
+                        method.ComplexCalc(integrand, left, right, step),
+                        method.Error(integrand, left, right, step));
                 }
+
                 Console.WriteLine();
             }
         }
