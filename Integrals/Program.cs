@@ -6,13 +6,14 @@ namespace Integrals
     {
         public static void Main(string[] args)
         {
+            // ReSharper disable once InconsistentNaming
             var N = int.Parse(args[0]);
             var parameters = new Parameters(N);
+
             var methods = parameters.GetMethods();
             var integrand = parameters.GetIntegrand();
-
-            var left = 0.1*N;
-            var right = 0.5 + 0.2*N;
+            var left = parameters.Left;
+            var right = parameters.Right;
             var steps = new[] {0.1, 0.05, 0.025};
             var format = "{0,-20} {1,-20} {2,-20}";
 
@@ -35,9 +36,9 @@ namespace Integrals
                 Console.WriteLine();
             }
 
-            var gauss2 = new Gauss2(integrand, left, right);
+            var gaussMethod = parameters.GetGaussMethod();
             Console.WriteLine(format, "Method", "Integral value", "C1 and C2");
-            Console.WriteLine(format, gauss2.GetName(), gauss2.Calc(), gauss2.C1() + " and " + gauss2.C2());
+            Console.WriteLine(format, gaussMethod.GetName(), gaussMethod.Calc(), gaussMethod.C1() + " and " + gaussMethod.C2());
         }
     }
 }

@@ -6,22 +6,36 @@ namespace Integrals
     public class Parameters
     {
         private int N { get; }
+        public double Left => 0.1 * N;
+        public double Right => 0.5 + 0.2 * N;
 
         public Parameters(int N)
         {
             this.N = N;
         }
 
-        public List<Method> GetMethods()
+        public IEnumerable<Method> GetMethods()
         {
             return Methods[N];
         }
 
-        private static Dictionary<int, List<Method>> Methods => new Dictionary<int, List<Method>>
+        private static Dictionary<int, IEnumerable<Method>> Methods => new Dictionary<int, IEnumerable<Method>>
         {
             {6, new List<Method> {new LeftRectangle(), new ThreeEight()}},
             {9, new List<Method> {new Trapeze(), new Simpson()}},
             {20, new List<Method> {new Simpson(), new Gregory()}},
+        };
+
+        public IGaussMethod GetGaussMethod()
+        {
+            return GaussMethods[N];
+        }
+
+        private Dictionary<int, IGaussMethod> GaussMethods => new Dictionary<int, IGaussMethod>
+        {
+            {6, new Gauss2(GetIntegrand(), Left, Right)},
+            {9, new Gauss3(GetIntegrand(), Left, Right)},
+            {20, new Gauss2(GetIntegrand(), Left, Right)},
         };
 
         public Func<double, double> GetIntegrand()
