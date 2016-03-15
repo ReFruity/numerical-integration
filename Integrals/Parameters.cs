@@ -3,13 +3,17 @@ using System.Collections.Generic;
 
 namespace Integrals
 {
-    class Parameters
+    public static class Parameters
     {
-        public static int N => 9;
+        public static int N => 20;
 
         public static List<Method> GetMethods()
         {
-            return Methods[N];
+            var result = Methods[N];
+
+            result.Add(new Gauss2());
+
+            return result;
         }
 
         private static Dictionary<int, List<Method>> Methods => new Dictionary<int, List<Method>>
