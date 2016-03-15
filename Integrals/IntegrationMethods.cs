@@ -4,7 +4,7 @@ namespace Integrals
 {
     public abstract class Method
     {
-        protected abstract int P();
+        public abstract int P();
         public abstract double ComplexCalc(Func<double, double> func, double left, double right, double step);
 
         public double Error(Func<double, double> func, double left, double right, double step)
@@ -14,6 +14,11 @@ namespace Integrals
             var two = Math.Pow(2, P());
             var res = two * (i05 - i1) / (two - 1);
             return Math.Abs(res);
+        }
+
+        public String GetName()
+        {
+            return GetType().Name + " (p = " + P() + ")";
         }
     }
     public abstract class SimpleMethod : Method
@@ -36,26 +41,26 @@ namespace Integrals
     }
     class LeftRectangle : SimpleMethod
     {
-        protected override int P() => 1;
+        public override int P() => 1;
         public override double Calc(Func<double, double> func, double left, double right) =>
             func(left) * Math.Abs(right - left);
 
     }
     class RightRectangle : SimpleMethod
     {
-        protected override int P() => 1;
+        public override int P() => 1;
         public override double Calc(Func<double, double> func, double left, double right) =>
             func(right) * Math.Abs(right - left);
     }
     class Simpson : SimpleMethod
     {
-        protected override int P() => 4;
+        public override int P() => 4;
         public override double Calc(Func<double, double> func, double left, double right) =>
             (right - left) / 6 * (func(left) + 4 * func((left + right) / 2) + func(right));
     }
     class Gregory : Method
     {
-        protected override int P() => 4;
+        public override int P() => 4;
         public override double ComplexCalc(Func<double, double> func, double left, double right, double step)
         {
             var n = (int)Math.Round((right - left) / step);
@@ -83,14 +88,14 @@ namespace Integrals
     }
     public class Trapeze : SimpleMethod
     {
-        protected override int P() => 2;
+        public override int P() => 2;
         public override double Calc(Func<double, double> func, double left, double right) =>
             0.5 * (right - left) * (func(left) + func(right));
     }
 
     public class ThreeEight : SimpleMethod
     {
-        protected override int P() => 4;
+        public override int P() => 4;
         public override double Calc(Func<double, double> func, double left, double right)
         {
             var h = right - left;
@@ -105,19 +110,24 @@ namespace Integrals
     public class Gauss2
     {
         public int P() => 3;
-        public double C1() => (Right - Left) / 2;
-        public double C2() => (Left + Right) / 2;
-        public double Calc() => C1() * (Func(-C1() / Math.Sqrt(3) + C2()) + Func(C1() / Math.Sqrt(3) + C2()));
+        public double C1() => (right - left) / 2;
+        public double C2() => (left + right) / 2;
+        public double Calc() => C1() * (func(-C1() / Math.Sqrt(3) + C2()) + func(C1() / Math.Sqrt(3) + C2()));
 
-        private readonly Func<double, double> Func;
-        private readonly double Left;
-        private readonly double Right;
+        private readonly Func<double, double> func;
+        private readonly double left;
+        private readonly double right;
 
         public Gauss2(Func<double, double> func, double left, double right)
         {
-            Func = func;
-            Left = left;
-            Right = right;
+            this.func = func;
+            this.left = left;
+            this.right = right;
+        }
+
+        public String GetName()
+        {
+            return GetType().Name + " (p = " + P() + ")";
         }
     }
 }

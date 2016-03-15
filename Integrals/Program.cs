@@ -16,17 +16,18 @@ namespace Integrals
             var steps = new[] {0.1, 0.05, 0.025};
             var format = "{0,-20} {1,-20} {2,-20}";
 
-            Console.WriteLine("N = " + N);
-            Console.WriteLine(format, "Method", "Integral value", "Error");
+            Console.WriteLine("N = " + N + "\n");
+            Console.WriteLine(format, "Step/Method", "Integral value", "Error");
 
-            foreach (var step in steps)
+            
+            foreach (var method in methods)
             {
-                Console.WriteLine(step);
+                Console.WriteLine(method.GetName());
 
-                foreach (var method in methods)
+                foreach (var step in steps)
                 {
                     Console.WriteLine(format,
-                        method.GetType().Name,
+                        step,
                         method.ComplexCalc(integrand, left, right, step),
                         method.Error(integrand, left, right, step));
                 }
@@ -36,7 +37,7 @@ namespace Integrals
 
             var gauss2 = new Gauss2(integrand, left, right);
             Console.WriteLine(format, "Method", "Integral value", "C1 and C2");
-            Console.WriteLine(format, gauss2.GetType().Name, gauss2.Calc(), gauss2.C1() + " and " + gauss2.C2());
+            Console.WriteLine(format, gauss2.GetName(), gauss2.Calc(), gauss2.C1() + " and " + gauss2.C2());
         }
     }
 }
