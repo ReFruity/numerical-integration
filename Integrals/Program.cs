@@ -6,9 +6,10 @@ namespace Integrals
     {
         public static void Main(string[] args)
         {
-            var N = Parameters.N;
-            var methods = Parameters.GetMethods();
-            var integrand = Parameters.GetIntegrand();
+            var N = int.Parse(args[0]);
+            var parameters = new Parameters(N);
+            var methods = parameters.GetMethods();
+            var integrand = parameters.GetIntegrand();
 
             var left = 0.1*N;
             var right = 0.5 + 0.2*N;
@@ -32,6 +33,10 @@ namespace Integrals
 
                 Console.WriteLine();
             }
+
+            var gauss2 = new Gauss2(integrand, left, right);
+            Console.WriteLine(format, "Method", "Integral value", "C1 and C2");
+            Console.WriteLine(format, gauss2.GetType().Name, gauss2.Calc(), gauss2.C1() + " and " + gauss2.C2());
         }
     }
 }

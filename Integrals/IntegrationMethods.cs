@@ -102,16 +102,22 @@ namespace Integrals
         }
     }
 
-    public class Gauss2 : Method
+    public class Gauss2
     {
-        protected override int P() => 3;
+        public int P() => 3;
+        public double C1() => (Right - Left) / 2;
+        public double C2() => (Left + Right) / 2;
+        public double Calc() => C1() * (Func(-C1() / Math.Sqrt(3) + C2()) + Func(C1() / Math.Sqrt(3) + C2()));
 
-        public override double ComplexCalc(Func<double, double> func, double left, double right, double step)
+        private readonly Func<double, double> Func;
+        private readonly double Left;
+        private readonly double Right;
+
+        public Gauss2(Func<double, double> func, double left, double right)
         {
-            var c1 = (right - left)/2;
-            var c2 = (left + right)/2;
-
-            return c1*(func(-c1/Math.Sqrt(3) + c2) + func(c1/Math.Sqrt(3) + c2));
+            Func = func;
+            Left = left;
+            Right = right;
         }
     }
 }
